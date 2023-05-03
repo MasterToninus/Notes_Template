@@ -1,0 +1,377 @@
+
+%primo passo: creare un environment box personalizzato
+%   Preambolo personalizzato 
+%		Inscatolamento di teoremi, dimostrazioni e definizioni con diversi colori
+%
+%
+% i colori di questa pagina http://en.wikibooks.org/wiki/LaTeX/Colors#The_68_standard_colors_known_to_dvips 
+%\usepackage[usenames,dvipsnames]{color}
+%
+% Fancy http://tex.stackexchange.com/questions/69148/how-to-insert-title-in-mdframed
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%-- Identification -- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NeedsTeXFormat{LaTeX2e}[1994/06/01]
+\ProvidesPackage{theoremtemplate-style}[2020/05/06 Toninus Custom Package]
+
+
+%%%%-- Required package -- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\RequirePackage{amssymb} 
+\RequirePackage[framemethod=TikZ]{mdframed}
+
+% Workaround: https://tex.stackexchange.com/questions/1273/loading-a-package-conditionally
+% Require package amsthm only in the plain option
+\newif\if@plain\@plainfalse
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%-- Plain Option --%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\DeclareOption{plain}{\@plaintrue}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%-- Fancy Option --%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\DeclareOption{fancy}{
+	\@plainfalse
+	
+	% based on https://www.ps.uni-saarland.de/Publications/documents/Aiken_2009_File.pdf
+
+		%Dotted Line
+		\mdfdefinestyle{dotted}{ 
+			tikzsetting={
+				draw= white, 
+				dash pattern = on 3pt off 3pt 
+			}
+		}
+	
+	%% Theorem Style %%%
+		\mdfdefinestyle{theoremstyle}{
+			linecolor=blue,
+			middlelinewidth=2pt,
+			skipabove=10pt,
+			%	leftmargin=-10pt,
+			%	rightmargin=-10pt,
+			everyline = true,
+		}
+	
+	%% Provable Statement boxes %%%
+		\newmdtheoremenv[style=theoremstyle]{lemma}{Lemma}[section]
+		\newmdtheoremenv[style=theoremstyle]{theorem}{Theorem}[section]
+		\newmdtheoremenv[style=theoremstyle]{corollary}{Corollary}[section]
+		\newmdtheoremenv[style=theoremstyle]{proposition}{Proposition}[section]
+		\newmdtheoremenv[style=theoremstyle]{bigthm}{THEOREM}	
+		\renewcommand{\thebigthm}{\Alph{bigthm}}
+	
+	%%  -TENTATIVE-   Fancy Lemma
+		\newcounter{Lemma}[section]
+		\newenvironment{Lemma}[1][]{%
+			 \stepcounter{Lemma}%
+			  \ifstrempty{#1}%
+			  
+			{\mdfsetup{%
+				frametitle={%
+					\tikz[baseline=(current bounding box.east),outer sep=0pt]
+					\node[line width=1pt,anchor=east,rectangle,draw=blue!20,fill=white]
+		    		{\strut \color{blue}{Lemma}~\theLemma};
+	    		}
+	    	}  }%
+			{\mdfsetup{%
+				frametitle={%
+					\tikz[baseline=(current bounding box.east),outer sep=0pt]
+					\node[line width=1pt,anchor=east,rectangle,draw=blue!20,fill=white]
+					{\strut \color{blue}{Lemma}~\theLemma:~\color{gray}{#1}};
+				}
+			}	}%
+			\mdfsetup{innertopmargin=10pt,linecolor=blue!20,%
+	            linewidth=1pt,topline=true,%
+	            frametitleaboveskip=\dimexpr-\ht\strutbox\relax,}
+			\begin{mdframed}[]\relax%
+	  	}{\end{mdframed}}
+	
+	
+	
+	%-----------------------------------------------
+	%% Hypotesis sub Frame
+	%-----------------------------------------------
+		\usetikzlibrary{calc}
+	%	\usepackage{fourier-orns}
+		\tikzset{
+	  		box/.style={
+	      		rectangle,
+	      		draw=red,
+	      		fill=white,
+	      		scale=1,
+	      		overlay
+	      	}
+		}
+	
+		\mdfdefinestyle{hypothesis}{%
+	 		hidealllines=true,leftline=true,
+	 		skipabove=12,skipbelow=12pt,
+	 		innertopmargin=0.4em,%
+	 		innerbottommargin=0.4em,%
+	 		innerrightmargin=0.7em,%
+	 		rightmargin=0.7em,%
+	 		innerleftmargin=1.7em,%
+	 		leftmargin=0.7em,%
+	 		middlelinewidth=.2em,%
+	 		linecolor=blue,%
+	 		firstextra={\path let \p1=(P), \p2=(O) in ($(\x2,0)+(0,\y1)$) 
+	                           node[box] {\textcolor{blue}{Hp:}};},%
+	 		secondextra={\path let \p1=(P), \p2=(O) in ($(\x2,0)+(0,\y1)$) 
+	                           node[box] {\textcolor{blue}{Hp:}};},%
+	 		middleextra={\path let \p1=(P), \p2=(O) in ($(\x2,0)+(0,\y1)$) 
+	                           node[box] {\textcolor{blue}{Hp:}};},%
+	 		singleextra={\path let \p1=(P), \p2=(O) in ($(\x2,0)+(0,\y1)$) 
+	                           node[box] {\textcolor{blue}{Hp:}};},%
+		}
+	
+		\newmdenv[style=hypothesis]{hypothesis}
+	
+	
+	
+	
+	%-----------------------------------------------
+	%Thesis sub Frame
+	%-----------------------------------------------
+		\mdfdefinestyle{thesis}{%
+	 		hidealllines=true,leftline=true,
+	 		skipabove=12,skipbelow=12pt,
+	 		innertopmargin=0.4em,%
+	 		innerbottommargin=0.4em,%
+	 		innerrightmargin=0.7em,%
+	 		rightmargin=0.7em,%
+	 		innerleftmargin=1.7em,%
+	 		leftmargin=0.7em,%
+	 		middlelinewidth=.2em,%
+	 		linecolor=blue,%
+	 		firstextra={\path let \p1=(P), \p2=(O) in ($(\x2,0)+(0,\y1)$) 
+	                           node[box] {\textcolor{blue}{Th:}};},%
+	 		secondextra={\path let \p1=(P), \p2=(O) in ($(\x2,0)+(0,\y1)$) 
+	                           node[box] {\textcolor{blue}{Th:}};},%
+	 		middleextra={\path let \p1=(P), \p2=(O) in ($(\x2,0)+(0,\y1)$) 
+	                           node[box] {\textcolor{blue}{Th:}};},%
+	 		singleextra={\path let \p1=(P), \p2=(O) in ($(\x2,0)+(0,\y1)$) 
+	                           node[box] {\textcolor{blue}{Th:}};},%
+		}
+		\newmdenv[style=thesis]{thesis}
+	
+	
+	%-----------------------------------------------
+	% PROOF: subframe
+	%Dimostrazione, Tratteggiato da appendere sotto la proposizione
+	%-----------------------------------------------
+		\mdfdefinestyle{proofstyle}{
+			style = dotted,
+			linecolor=blue,
+			skipabove=0pt,
+			topline =false,
+		}
+	 
+	    \newenvironment{proof}%
+	    {%
+			 \begin{mdframed}[style = proofstyle,frametitle={Proof:}]
+	    }
+	    {%
+	    	\begin{flushright}
+				$\square$
+			\end{flushright}
+	    \end{mdframed}%
+	    }%
+	
+	%-----------------------------------------------
+	%DEFINITION
+	%-----------------------------------------------
+	
+		\mdfdefinestyle{definitionstyle}{
+			linecolor=red,
+			middlelinewidth=2pt,
+			frametitlerule=true,
+			frametitlerulecolor=green!60,
+			%	frametitlerulewidth =1pt,
+			%	innertopmargin= \topskip ,
+			skipabove=3pt,
+		}
+	
+		\newmdtheoremenv[ style = definitionstyle ]{definition}{Definition}[section]
+	
+	%-----------------------------------------------
+	%NOTATION   (WIP)
+		\mdfdefinestyle{notationstyle}{
+			roundcorner=5pt,
+			linecolor=green,
+			middlelinewidth=2pt,
+			frametitlerule=true,
+			frametitlerulecolor=green!60,
+			frametitleaboveskip=2pt,
+			frametitlebelowskip=2pt,
+			%frametitlerulewidth =1pt,
+			%	innertopmargin= \topskip ,
+%			frametitle={Notation},
+			skipabove=3pt,
+		}
+	\newmdtheoremenv[style=notationstyle]{notation}{Notation}[section]
+
+
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%TAKE AWAY MASSAGE (WIP)
+	\mdfdefinestyle{takeawaystyle}{
+		linecolor=yellow,
+		middlelinewidth=1pt,
+		frametitlerule=true,
+		frametitle={Take Away Message},
+		skipabove=3pt,
+	}
+	\newmdenv[style=takeawaystyle]{TAM}
+
+
+
+
+
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	% EXAMPLE  (WIP)
+	\mdfdefinestyle{examplestyle}{
+  		linecolor=gray,
+  		% frametitle={\textbf{Example:}\colorbox{white}{\space#1\space}},
+  	  	innertopmargin=10pt,
+    	frametitleaboveskip=-\ht\strutbox,
+    	frametitlealignment=\center
+	}
+
+	\newmdtheoremenv[style=examplestyle]{example}{Example}[section]
+	
+
+	
+	
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	% Observation (WIP)
+	\mdfdefinestyle{observationstyle}{
+		linecolor=magenta,
+		middlelinewidth=1pt,
+		frametitlerule=true,
+	%	frametitle={Observation},	
+		skipabove=3pt,
+	}
+	
+	%\newmdenv[style=observationstyle]{observation}
+	\mdtheorem[ style = observationstyle]{observation}{Observation}[section]
+	
+	
+	
+	
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	% Remark (WIP)
+	\mdfdefinestyle{remarkstyle}{
+		linecolor=orange,%cyan,
+		middlelinewidth=1pt,
+		frametitlerule=true,
+		skipabove=3pt,
+	}
+	
+	\newmdtheoremenv[style=remarkstyle]{remark}{Remark}[section]
+
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	% Remark (WIP)
+	\mdfdefinestyle{reminderstyle}{
+		linecolor=cyan,
+		middlelinewidth=1pt,
+		frametitlerule=true,
+		skipabove=3pt,
+	}
+	
+	\newmdtheoremenv[style=reminderstyle]{reminder}{Reminder}[section]
+
+	
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	% NotaBene (WIP)
+	\newenvironment{NB}[1]
+	    {
+			\begin{description}
+				\item[N.B. :]
+				
+				
+	    }
+	    { 
+			\end{description}    
+		}
+	
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	% Danger box (WIP).
+	% It encapsulates a piece of text that needs revision
+	% http://tex.stackexchange.com/questions/52023/mdframed-put-something-on-the-start-of-one-vertical-left-rule
+	
+	\definecolor{warningColor}{named}{red}
+	\tikzset{
+	  warningsymbol/.style={
+	      rectangle,
+	      draw=warningColor,
+	      fill=white,
+	      scale=1,
+	      overlay}
+	}
+	
+	\mdfdefinestyle{warning}{%
+	 hidealllines=true,leftline=true,
+	 skipabove=12,skipbelow=12pt,
+	 innertopmargin=0.4em,%
+	 innerbottommargin=0.4em,%
+	 innerrightmargin=0.7em,%
+	 rightmargin=0.7em,%
+	 innerleftmargin=1.7em,%
+	 leftmargin=0.7em,%
+	 middlelinewidth=.2em,%
+	 linecolor=warningColor,%
+	 fontcolor=warningColor,%
+	 firstextra={\path let \p1=(P), \p2=(O) in ($(\x2,0)+0.5*(0,\y1)$) 
+	                           node[warningsymbol] {\danger};},%
+	 secondextra={\path let \p1=(P), \p2=(O) in ($(\x2,0)+0.5*(0,\y1)$) 
+	                           node[warningsymbol] {\danger};},%
+	 middleextra={\path let \p1=(P), \p2=(O) in ($(\x2,0)+0.5*(0,\y1)$) 
+	                           node[warningsymbol] {\danger};},%
+	 singleextra={\path let \p1=(P), \p2=(O) in ($(\x2,0)+0.5*(0,\y1)$) 
+	                           node[warningsymbol] {\danger};},%
+	}
+	
+	\newmdenv[style=warning]{Warning}
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%-- Execute Options --%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ExecuteOptions{plain} %Default option
+%\ExecuteOptions{fancy} %Default option
+
+\ProcessOptions 
+\relax
+
+\if@plain
+ 	\RequirePackage{amsthm}
+
+	\theoremstyle{plain}
+		\newtheorem{thm}{Theorem}[section]
+		\newtheorem{theorem}[thm]{Theorem}
+		\newtheorem{proposition}[thm]{Proposition}
+		\newtheorem{lemma}[thm]{Lemma}
+		\newtheorem{corollary}[thm]{Corollary}
+
+	\newtheorem{bigthm}{THEOREM}
+	\renewcommand{\thebigthm}{\Alph{bigthm}}
+	
+	\theoremstyle{definition}
+		\newtheorem{definition}[thm]{Definition}
+	
+	\theoremstyle{remark}
+		\newtheorem{remark}[thm]{Remark}
+		\newtheorem{example}[thm]{Example}
+		\newtheorem{notation}[thm]{Notation}
+		\newtheorem{reminder}[thm]{Reminder}
+\fi
+
+\endinput
