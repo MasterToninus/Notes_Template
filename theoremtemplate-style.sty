@@ -21,6 +21,8 @@
 %%%%-- Required package -- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \RequirePackage{amssymb} 
 \RequirePackage[framemethod=TikZ]{mdframed}
+\RequirePackage{aliascnt}
+
 
 % Workaround: https://tex.stackexchange.com/questions/1273/loading-a-package-conditionally
 % Require package amsthm only in the plain option
@@ -39,6 +41,19 @@
 \DeclareOption{fancy}{
 	\@plainfalse
 	
+	\providecommand*{\definitionautorefname}{Definition}
+	\providecommand*{\theoremautorefname}{Theorem}
+	\providecommand*{\lemmaautorefname}{Lemma}
+	\providecommand*{\corollaryautorefname}{Corollary}
+	\providecommand*{\propositionautorefname}{Proposition}
+	\providecommand*{\exampleautorefname}{Example}
+	\providecommand*{\remarkautorefname}{Remark}
+	\providecommand*{\notationautorefname}{Notation}
+	\providecommand*{\observationautorefname}{Observation}
+	\renewcommand{\sectionautorefname}{Section}
+	\renewcommand{\subsectionautorefname}{Subsection}
+	\renewcommand{\subsubsectionautorefname}{Subsection}
+	\def\equationautorefname~#1\null{Equation~(#1)\null}
 	% based on https://www.ps.uni-saarland.de/Publications/documents/Aiken_2009_File.pdf
 
 		%Dotted Line
@@ -60,10 +75,26 @@
 		}
 	
 	%% Provable Statement boxes %%%
-		\newmdtheoremenv[style=theoremstyle]{lemma}{Lemma}[section]
-		\newmdtheoremenv[style=theoremstyle]{theorem}{Theorem}[section]
-		\newmdtheoremenv[style=theoremstyle]{corollary}{Corollary}[section]
-		\newmdtheoremenv[style=theoremstyle]{proposition}{Proposition}[section]
+		\newmdtheoremenv[style=theoremstyle]{thm}{Theorem}[section]
+		
+		
+		\newaliascnt{theorem}{thm}
+		\newmdtheoremenv[style=theoremstyle]{theorem}[theorem]{Theorem}
+		\aliascntresetthe{theorem}
+		
+		\newaliascnt{lemma}{thm}
+		\newmdtheoremenv[style=theoremstyle]{lemma}[lemma]{Lemma}
+		\aliascntresetthe{lemma}
+		
+		\newaliascnt{corollary}{thm}
+		\newmdtheoremenv[style=theoremstyle]{corollary}[corollary]{Corollary}
+		\aliascntresetthe{corollary}
+		
+		\newaliascnt{proposition}{thm}
+		\newmdtheoremenv[style=theoremstyle]{proposition}[proposition]{Proposition}
+		\aliascntresetthe{proposition}
+		
+		
 		\newmdtheoremenv[style=theoremstyle]{bigthm}{THEOREM}	
 		\renewcommand{\thebigthm}{\Alph{bigthm}}
 	
@@ -198,8 +229,9 @@
 			skipabove=3pt,
 		}
 	
-		\newmdtheoremenv[ style = definitionstyle ]{definition}{Definition}[section]
-	
+		\newaliascnt{definition}{thm}
+		\newmdtheoremenv[ style = definitionstyle ]{definition}[definition]{Definition}
+		\aliascntresetthe{definition}
 	%-----------------------------------------------
 	%NOTATION   (WIP)
 		\mdfdefinestyle{notationstyle}{
@@ -215,8 +247,10 @@
 %			frametitle={Notation},
 			skipabove=3pt,
 		}
-	\newmdtheoremenv[style=notationstyle]{notation}{Notation}[section]
-
+		
+\newaliascnt{notation}{thm}
+	\newmdtheoremenv[style=notationstyle]{notation}[notation]{Notation}
+\aliascntresetthe{notation}
 
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%TAKE AWAY MASSAGE (WIP)
@@ -243,8 +277,9 @@
     	frametitlealignment=\center
 	}
 
-	\newmdtheoremenv[style=examplestyle]{example}{Example}[section]
-	
+\newaliascnt{example}{thm}
+	\newmdtheoremenv[style=examplestyle]{example}[example]{Example}
+		\aliascntresetthe{example}
 
 	
 	
@@ -259,8 +294,9 @@
 	}
 	
 	%\newmdenv[style=observationstyle]{observation}
-	\mdtheorem[ style = observationstyle]{observation}{Observation}[section]
-	
+	\newaliascnt{observation}{thm}
+	\mdtheorem[ style = observationstyle]{observation}[observation]{Observation}
+		\aliascntresetthe{observation}
 	
 	
 	
@@ -272,9 +308,9 @@
 		frametitlerule=true,
 		skipabove=3pt,
 	}
-	
-	\newmdtheoremenv[style=remarkstyle]{remark}{Remark}[section]
-
+	\newaliascnt{remark}{thm}
+	\newmdtheoremenv[style=remarkstyle]{remark}[remark]{Remark}
+	\aliascntresetthe{remark}
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	% Remark (WIP)
 	\mdfdefinestyle{reminderstyle}{
@@ -284,7 +320,7 @@
 		skipabove=3pt,
 	}
 	
-	\newmdtheoremenv[style=reminderstyle]{reminder}{Reminder}[section]
+	\newmdtheoremenv[style=reminderstyle]{reminder}[thm]{Reminder}
 
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -354,24 +390,73 @@
 \if@plain
  	\RequirePackage{amsthm}
 
-	\theoremstyle{plain}
-		\newtheorem{thm}{Theorem}[section]
-		\newtheorem{theorem}[thm]{Theorem}
-		\newtheorem{proposition}[thm]{Proposition}
-		\newtheorem{lemma}[thm]{Lemma}
-		\newtheorem{corollary}[thm]{Corollary}
+% --- Theorem Style ---
+\theoremstyle{plain}
 
-	\newtheorem{bigthm}{THEOREM}
-	\renewcommand{\thebigthm}{\Alph{bigthm}}
-	
-	\theoremstyle{definition}
-		\newtheorem{definition}[thm]{Definition}
-	
-	\theoremstyle{remark}
-		\newtheorem{remark}[thm]{Remark}
-		\newtheorem{example}[thm]{Example}
-		\newtheorem{notation}[thm]{Notation}
-		\newtheorem{reminder}[thm]{Reminder}
+\newtheorem{thm}{Theorem}[section]
+
+\newaliascnt{theorem}{thm}
+\newtheorem{theorem}[theorem]{Theorem}
+\aliascntresetthe{theorem}
+\providecommand*{\theoremautorefname}{Theorem}
+
+\newaliascnt{proposition}{thm}
+\newtheorem{proposition}[proposition]{Proposition}
+\aliascntresetthe{proposition}
+\providecommand*{\propositionautorefname}{Proposition}
+
+\newaliascnt{lemma}{thm}
+\newtheorem{lemma}[lemma]{Lemma}
+\aliascntresetthe{lemma}
+\providecommand*{\lemmaautorefname}{Lemma}
+
+\newaliascnt{corollary}{thm}
+\newtheorem{corollary}[corollary]{Corollary}
+\aliascntresetthe{corollary}
+\providecommand*{\corollaryautorefname}{Corollary}
+
+% --- Custom Theorem (e.g., Theorem A, B, ...) ---
+\newtheorem{bigthm}{THEOREM}
+\renewcommand{\thebigthm}{\Alph{bigthm}}
+\providecommand*{\bigthmautorefname}{Theorem}
+
+% --- Definition Style ---
+\theoremstyle{definition}
+
+\newaliascnt{definition}{thm}
+\newtheorem{definition}[definition]{Definition}
+\aliascntresetthe{definition}
+\providecommand*{\definitionautorefname}{Definition}
+
+% --- Remark Style ---
+\theoremstyle{remark}
+
+\newaliascnt{remark}{thm}
+\newtheorem{remark}[remark]{Remark}
+\aliascntresetthe{remark}
+\providecommand*{\remarkautorefname}{Remark}
+
+\newaliascnt{example}{thm}
+\newtheorem{example}[example]{Example}
+\aliascntresetthe{example}
+\providecommand*{\exampleautorefname}{Example}
+
+\newaliascnt{notation}{thm}
+\newtheorem{notation}[notation]{Notation}
+\aliascntresetthe{notation}
+\providecommand*{\notationautorefname}{Notation}
+
+\newaliascnt{reminder}{thm}
+\newtheorem{reminder}[reminder]{Reminder}
+\aliascntresetthe{reminder}
+\providecommand*{\reminderautorefname}{Reminder}
+
+\renewcommand{\sectionautorefname}{Section}
+\renewcommand{\subsectionautorefname}{Subsection}
+\renewcommand{\subsubsectionautorefname}{Subsection}
+
+\def\equationautorefname~#1\null{Equation~(#1)\null}
+		
 \fi
 
 \endinput

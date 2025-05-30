@@ -25,10 +25,16 @@
 \providecommand{\datapath}{.}
 
 %- Packages %+------------------------------------------------------------------------+
+\usepackage[utf8]{inputenc} % Only for pdfLaTeX
+\usepackage[T1]{fontenc}
 \usepackage{custom-style}
 \usepackage{math}
-\usepackage[fancy]{theoremtemplate-style}
+\usepackage[plain]{theoremtemplate-style}% change option to "plain" for the standard style
 \usepackage[margin=2cm]{geometry}
+
+
+\usepackage[backend=biber,style=alphabetic,sorting=nty]{biblatex}
+\bibliography{biblio.bib}
 
 
 
@@ -83,8 +89,7 @@
 % Bibliography (BibTex)
 % https://arxiv.org/hypertex/bibstyles/
 %=========================================================================#
-			\bibliographystyle{hep}
-			\bibliography{biblio}
+\printbibliography
 
 
 

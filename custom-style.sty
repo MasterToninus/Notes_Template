@@ -2,7 +2,7 @@
 %| Style file:
 %| Contents:	 packages and options
 %|
-%| Author: Antonio miti
+%| Author: Tony & Leo
 %+----------------------------------------------------------------------------+
 
 
@@ -18,25 +18,33 @@
 \RequirePackage{cancel}
 \RequirePackage{stackengine}
 \RequirePackage[export]{adjustbox}
-\RequirePackage[mode=buildnew,subpreambles=true]{standalone}
+%\RequirePackage[mode=buildnew,subpreambles=true]{standalone}
 \RequirePackage{textpos,eso-pic}
+\usepackage{enumitem}
 
 %- Packages: Fonts   % +------------------------------------------------------------------------+
-\RequirePackage[cal=boondox,scr=boondoxo]{mathalfa}
-% use mathscr for the v denoting hamiltonian vector fields. Avoid confusion with the infinitesimal action v!
 
-\RequirePackage{stmaryrd}
 \RequirePackage{fontawesome}
 
 %- Packages: Diagrams   % +------------------------------------------------------------------------+
 \RequirePackage{tikz}
 \usetikzlibrary{decorations.pathmorphing}
 \usetikzlibrary{arrows,shapes,calc}
-\RequirePackage{tikz-cd}
+\usepackage{tikz-cd}
+\tikzset{%
+    symbol/.style={%
+        ,draw=none
+        ,every to/.append style={%
+            edge node={node [sloped, allow upside down, auto=false]{$#1$}}}
+    }
+}
+\tikzset{/tikz/commutative diagrams/diagrams={column sep =large}}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{cd, fit}
 
 
-
-
+%- Packages: Collaboration- Drafting   % +---------------------------------------------------------+
+\RequirePackage[textsize=small,backgroundcolor=yellow!20!white]{todonotes}
 
 
 

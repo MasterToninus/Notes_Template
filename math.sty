@@ -2,18 +2,26 @@
 %| Style file:
 %| Contents:	 Math macros and constats
 %|
-%| Author: Antonio miti
+%| Author: Leo & Tony
 %+----------------------------------------------------------------------------+
 \ProvidesPackage{math}
+
+\RequirePackage{amsmath, amssymb}
+\RequirePackage{mathbbol} %\mathbb k
+
+
+\RequirePackage{tikz-cd}
 
 %- Macros: Math   % +------------------------------------------------------------------------+
 \providecommand{\action}{\curvearrowright}
 
-\newcommand{\N}{\mathbb{N}}
-\newcommand{\Z}{\mathbb{Z}}
-\newcommand{\Q}{\mathbb{Q}}
-\newcommand{\R}{\mathbb{R}}
-\newcommand{\C}{\mathbb{C}}
+\providecommand{\N}{\mathbb{N}}
+\providecommand{\Z}{\mathbb{Z}}
+\providecommand{\Q}{\mathbb{Q}}
+\providecommand{\R}{\mathbb{R}}
+\providecommand{\C}{\mathbb{C}}
+\providecommand{\K}{\mathbb{K}}
+
 
 \renewcommand{\i}{\mathrm{i}}
 \newcommand{\h}{\mathfrak{h}}
@@ -24,7 +32,7 @@
 \renewcommand{\epsilon}{\varepsilon}
 \renewcommand{\emptyset}{\varnothing}
 
-\newcommand{\A}{\mathcal{A}}
+\providecommand{\A}{\mathcal{A}}
 \newcommand{\B}{\mathcal{B}}
 \newcommand{\D}{\mathrm{D}}
 \newcommand{\G}{\mathcal{G}}
@@ -43,3 +51,56 @@
 % Cartan Calculus
 \renewcommand{\d}{\mathop{}\!{\mathrm{d}}}%https://tex.stackexchange.com/questions/14821/whats-the-proper-way-to-typeset-a-differential-operator/637613#637613
 \providecommand{\Lie}{\mathcal{L}} %Lie Derivative
+
+
+% Catys
+\newcommand{\morphism}[5]{%
+  \begin{tikzcd}[
+    column sep=2em,
+    row sep=-.5ex,
+    ampersand replacement=\&
+  ]
+  #1\colon~ \&[-3em]
+  #2\vphantom{#3} \arrow[r] \&
+  #3\vphantom{#2} \\
+  \&
+  #4\vphantom{#5} \arrow[r,mapsto] \&
+  #5\vphantom{#4} 
+  \end{tikzcd}%
+}
+
+
+\providecommand{\Ham}{\mathsf{Ham}}
+\providecommand{\ham}{\text{ham}}
+
+\providecommand{\Hom}{\mathrm{Hom}}
+\providecommand{\End}{\mathrm{End}}
+\providecommand{\Der}{\mathrm{Der}}
+\providecommand{\blank}{{\mathord{\text{\textvisiblespace}}}}
+\providecommand{\CE}{\mathrm{CE}}
+\providecommand{\dCE}{\d_{\CE}}
+\providecommand{\rev}{\mathrm{rev}}
+
+% - Dippel - Kern TEMP
+\newcommand{\Total}{{\scriptscriptstyle T}}
+\newcommand{\Wobs}{{\scriptscriptstyle N}}
+\newcommand{\Null}{{\scriptscriptstyle 0}}
+
+% - LEO
+\newcommand{\colvec}[1]{
+	\left(
+\begin{array}{l}
+	#1
+\end{array}
+\right)
+}
+
+\newcommand{\triple}[1]{(#1_\Total, #1_\Wobs, #1_\Null)}
+\newcommand{\Triple}[1]{
+\colvec{ #1_\Total\\  #1_\Wobs\\ #1_\Null}}
+\usepackage{stmaryrd}
+\newcommand{\GerstBracket}[2][]{\llbracket #1 , #2 \rrbracket}
+\newcommand{\red}{\textrm{red}}
+
+% - additional symbols
+\newcommand{\iHom}{\mathrm{iHom}}
